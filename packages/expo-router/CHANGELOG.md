@@ -18,7 +18,7 @@
 - Ensure initial route is created with params ([#27223](https://github.com/expo/expo/pull/27223) by [@marklawlor](https://github.com/marklawlor))
 - Fix pushing multiple hashes on web. ([#29990](https://github.com/expo/expo/pull/29990) by [@marklawlor](https://github.com/marklawlor))
 - Ensure navigation keeps within the closest group. ([#30266](https://github.com/expo/expo/pull/30266) by [@marklawlor](https://github.com/marklawlor))
-- Fix Fash Refresh on \_layout files that export unstable_settings
+- Fix Fash Refresh on \_layout files that export unstable_settings ([#29977](https://github.com/expo/expo/pull/29977) by [@marklawlor](https://github.com/marklawlor))
 
 ### 💡 Others
 
