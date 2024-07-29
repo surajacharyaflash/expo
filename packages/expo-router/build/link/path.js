@@ -1,4 +1,3 @@
-"use strict";
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -19,8 +18,6 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.resolve = void 0;
 // https://github.com/browserify/path-browserify/blob/master/index.js
 function assertPath(path) {
     if (typeof path !== 'string') {
@@ -104,44 +101,4 @@ function normalizeStringPosix(path, allowAboveRoot) {
     }
     return res;
 }
-// path.resolve([from ...], to)
-function resolve(...segments) {
-    let resolvedPath = '';
-    let resolvedAbsolute = false;
-    for (let i = segments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-        let path;
-        if (i >= 0) {
-            path = segments[i];
-        }
-        else {
-            path = '/';
-        }
-        assertPath(path);
-        // Skip empty entries
-        if (path.length === 0) {
-            continue;
-        }
-        resolvedPath = path + '/' + resolvedPath;
-        resolvedAbsolute = path.charCodeAt(0) === 47 /*/*/;
-    }
-    // At this point the path should be resolved to a full absolute path, but
-    // handle relative paths to be safe (might happen when process.cwd() fails)
-    // Normalize the path
-    resolvedPath = normalizeStringPosix(resolvedPath, !resolvedAbsolute);
-    if (resolvedAbsolute) {
-        if (resolvedPath.length > 0) {
-            return '/' + resolvedPath;
-        }
-        else {
-            return '/';
-        }
-    }
-    else if (resolvedPath.length > 0) {
-        return resolvedPath;
-    }
-    else {
-        return '.';
-    }
-}
-exports.resolve = resolve;
 //# sourceMappingURL=path.js.map
