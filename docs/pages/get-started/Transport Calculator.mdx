@@ -1,0 +1,142 @@
+import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, TextInput, Button, View, Picker, ScrollView } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
+
+const App = () => {
+  const [km, setKm] = useState('');
+  const [days, setDays] = useState('');
+  const [carRate, setCarRate] = useState('2500');
+  const [driverRate, setDriverRate] = useState('1200');
+  const [petrolRate, setPetrolRate] = useState('92');
+  const [option, setOption] = useState('1');
+  const [total, setTotal] = useState('0.00');
+  const [summary, setSummary] = useState('');
+
+  const calculate = () => {
+    const kmValue = parseFloat(km);
+    const daysValue = parseInt(days);
+    const carRateValue = parseFloat(carRate);
+    const driverRateValue = parseFloat(driverRate);
+    const petrolRateValue = parseFloat(petrolRate);
+
+    let dailyRate = carRateValue;
+    let totalValue = dailyRate * daysValue;
+
+    const fuelCostPerKm = petrolRateValue / 10;
+    const driverCost = driverRateValue * daysValue;
+
+    let fuelCost = 0;
+    let totalDriverCost = 0;
+
+    if (option === '1') {
+      totalValue += 0;
+    } else if (option === '2') {
+      fuelCost = fuelCostPerKm * kmValue * daysValue;
+      totalValue += fuelCost;
+    } else if (option === '3') {
+      totalDriverCost = driverCost;
+      totalValue += totalDriverCost;
+    } else if (option === '4') {
+      fuelCost = fuelCostPerKm * kmValue * daysValue;
+      totalDriverCost = driverCost;
+      totalValue += fuelCost + totalDriverCost;
+    }
+
+    setTotal(totalValue.toFixed(2));
+    setSummary(`Car Rent: ₹${(dailyRate * daysValue).toFixed(2)}\nDriver Cost: ₹${totalDriverCost.toFixed(2)}\nFuel Cost: ₹${fuelCost.toFixed(2)}`);
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <Text style={styles.logo}>RS</Text>
+        <Text style={styles.title}>Car Rental Calculator</Text>
+        <Text>Enter KM:</Text>
+        <TextInput style={styles.input} keyboardType="numeric" value={km} onChangeText={setKm} />
+        <Text>Enter Days:</Text>
+        <TextInput style={styles.input} keyboardType="numeric" value={days} onChangeText={setDays} />
+        <Text>Daily Rent for Car (₹):</Text>
+        <TextInput style={styles.input} keyboardType="numeric" value={carRate} onChangeText={setCarRate} />
+        <Text>Daily Rent for Driver (₹):</Text>
+        <TextInput style={styles.input} keyboardType="numeric" value={driverRate} onChangeText={setDriverRate} />
+        <Text>Current Petrol Rate (₹):</Text>
+        <TextInput style={styles.input} keyboardType="numeric" value={petrolRate} onChangeText={setPetrolRate} />
+        <Text>Select Option:</Text>
+        <RNPickerSelect
+          style={pickerSelectStyles}
+          value={option}
+          onValueChange={(value) => setOption(value)}
+          items={[
+            { label: 'Without Petrol Self-Drive', value: '1' },
+            { label: 'With Petrol Self-Drive', value: '2' },
+            { label: 'Without Petrol and Driver', value: '3' },
+            { label: 'With Petrol and Driver', value: '4' },
+          ]}
+        />
+        <Button title="Calculate" onPress={calculate} />
+        <Text style={styles.result}>Total Cost: ₹{total}</Text>
+        <Text style={styles.summary}>{summary}</Text>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  logo: {
+    fontSize: 32,
+    textAlign: 'center',
+    margin: 20,
+  },
+  title: {
+    fontSize: 24,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  result: {
+    fontSize: 24,
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  summary: {
+    fontSize: 16,
+    marginTop: 10,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 4,
+    color: 'black',
+    paddingRight: 30,
+    marginBottom: 10,
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderWidth: 0.5,
+    borderColor: 'purple',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30,
+    marginBottom: 10,
+  },
+});
+
+export default App;
